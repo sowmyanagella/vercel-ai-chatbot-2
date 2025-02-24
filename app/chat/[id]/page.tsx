@@ -63,10 +63,10 @@ import { cookies } from 'next/headers'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
-// Define the interface for ChatPageProps, keeping params as a simple object
+// Define the interface for ChatPageProps, using number for id
 export interface ChatPageProps {
   params: {
-    id: string; 
+    id: number;
   }
 }
 
@@ -108,4 +108,3 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   return <Chat id={chat.id} initialMessages={chat.messages} />
 }
-
