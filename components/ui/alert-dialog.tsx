@@ -159,14 +159,14 @@ import { buttonVariants } from '@/components/ui/button'
 const AlertDialog = AlertDialogPrimitive.Root
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
-// Updated the AlertDialogPortalProps to accept `className`
+// Modify to not pass `className` directly to Portal's props
 const AlertDialogPortal = ({
   className,
   children,
   ...props
-}: AlertDialogPrimitive.AlertDialogPortalProps & { className?: string }) => (
-  <AlertDialogPrimitive.Portal className={cn(className)} {...props}>
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+}: React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Portal> & { className?: string }) => (
+  <AlertDialogPrimitive.Portal {...props}>
+    <div className={cn(className, "fixed inset-0 z-50 flex items-end justify-center sm:items-center")}>
       {children}
     </div>
   </AlertDialogPrimitive.Portal>
@@ -175,7 +175,7 @@ const AlertDialogPortal = ({
 AlertDialogPortal.displayName = AlertDialogPrimitive.Portal.displayName
 
 const AlertDialogOverlay = React.forwardRef<React.ElementRef<typeof AlertDialogPrimitive.Overlay>, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>>(
-  ({ className, children, ...props }, ref) => (
+  ({ className, ...props }, ref) => (
     <AlertDialogPrimitive.Overlay
       className={cn(
         'fixed inset-0 z-50 bg-background/80 backdrop-blur-sm transition-opacity animate-in fade-in',
@@ -191,7 +191,7 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
 const AlertDialogContent = React.forwardRef<React.ElementRef<typeof AlertDialogPrimitive.Content>, React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>>(
   ({ className, ...props }, ref) => (
-    <AlertDialogPortal>
+    <AlertDialogPortal className={className}>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         ref={ref}
