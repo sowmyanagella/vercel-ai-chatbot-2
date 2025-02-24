@@ -65,9 +65,8 @@ export const runtime = 'edge';
 export const preferredRegion = 'home';
 
 export interface ChatPageProps {
-  params: {
-    id: string;
-  };
+  params: Record<string, string>; 
+}
 }
 
 export async function generateMetadata({
