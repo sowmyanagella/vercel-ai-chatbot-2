@@ -65,7 +65,7 @@ export const runtime = 'edge';
 export const preferredRegion = 'home';
 
 export interface ChatPageProps {
-  params: Record<string, string>; 
+  params: Record<string, string>
 }
 }
 
