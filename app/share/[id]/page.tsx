@@ -69,14 +69,13 @@ import { FooterText } from '@/components/footer'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
-// ✅ Fix: Ensure params is a plain object
+// ✅ Ensure params is a simple object, NOT a Promise
 interface SharePageProps {
   params: { id: string } // ✅ No Promise<>
 }
 
-export async function generateMetadata({
-  params
-}: SharePageProps): Promise<Metadata> {
+// ✅ Fix: No unnecessary awaits for params
+export async function generateMetadata({ params }: SharePageProps): Promise<Metadata> {
   const chat = await getSharedChat(params.id) // ✅ params is a plain object
 
   return {
@@ -84,8 +83,9 @@ export async function generateMetadata({
   }
 }
 
+// ✅ Final working Next.js page component
 export default async function SharePage({ params }: SharePageProps) {
-  const chat = await getSharedChat(params.id) // ✅ No need to await params
+  const chat = await getSharedChat(params.id) // ✅ No Promise in params
 
   if (!chat || !chat?.sharePath) {
     notFound()
