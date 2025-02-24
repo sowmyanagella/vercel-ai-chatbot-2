@@ -50,6 +50,13 @@ export default async function SharePage({ params }: SharePageProps) {
         </div>
         <ChatList messages={chat.messages} />
       </div>
+      <FooterText />
+    </>
+  )
+}
+
+
+ 
 
 
 // import { type Metadata } from 'next'
