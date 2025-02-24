@@ -52,7 +52,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
 }*/
 
 
-
 import { type Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
@@ -64,10 +63,14 @@ import { cookies } from 'next/headers'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
+// Define the interface for ChatPageProps, keeping params as a simple object
 export interface ChatPageProps {
-  params: Record<string, string>;
+  params: {
+    id: string; 
+  }
 }
 
+// Generate metadata for the page
 export async function generateMetadata({
   params
 }: ChatPageProps): Promise<Metadata> {
@@ -84,6 +87,7 @@ export async function generateMetadata({
   }
 }
 
+// Main component for the chat page
 export default async function ChatPage({ params }: ChatPageProps) {
   const cookieStore = cookies()
   const session = await auth({ cookieStore })
@@ -104,3 +108,4 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   return <Chat id={chat.id} initialMessages={chat.messages} />
 }
+
