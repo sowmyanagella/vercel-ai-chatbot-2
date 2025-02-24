@@ -53,56 +53,54 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
 
 
- import { type Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { type Metadata } from 'next'
+import { notFound, redirect } from 'next/navigation'
 
-import { auth } from '@/auth';
-import { getChat } from '@/app/actions';
-import { Chat } from '@/components/chat';
-import { cookies } from 'next/headers';
+import { auth } from '@/auth'
+import { getChat } from '@/app/actions'
+import { Chat } from '@/components/chat'
+import { cookies } from 'next/headers'
 
-export const runtime = 'edge';
-export const preferredRegion = 'home';
+export const runtime = 'edge'
+export const preferredRegion = 'home'
 
 export interface ChatPageProps {
-  params: Record<string, string>
-}
+  params: Record<string, string>;
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: ChatPageProps): Promise<Metadata> {
-  const cookieStore = cookies();
-  const session = await auth({ cookieStore });
+  const cookieStore = cookies()
+  const session = await auth({ cookieStore })
 
   if (!session?.user) {
-    return {}; // Return empty metadata if user is not authenticated
+    return {}
   }
 
-  const chat = await getChat(params.id);
+  const chat = await getChat(params.id)
   return {
-    title: chat?.title.toString().slice(0, 50) ?? 'Chat', // Title truncation
-  };
+    title: chat?.title.toString().slice(0, 50) ?? 'Chat'
+  }
 }
 
 export default async function ChatPage({ params }: ChatPageProps) {
-  const cookieStore = cookies();
-  const session = await auth({ cookieStore });
+  const cookieStore = cookies()
+  const session = await auth({ cookieStore })
 
   if (!session?.user) {
-    redirect(`/sign-in?next=/chat/${params.id}`);
+    redirect(`/sign-in?next=/chat/${params.id}`)
   }
 
-  const chat = await getChat(params.id);
+  const chat = await getChat(params.id)
 
   if (!chat) {
-    notFound(); // If chat doesn't exist, show 404 page
+    notFound()
   }
 
   if (chat?.userId !== session?.user?.id) {
-    notFound(); // If user is not the owner of the chat, show 404 page
+    notFound()
   }
 
-  return <Chat id={chat.id} initialMessages={chat.messages} />;
+  return <Chat id={chat.id} initialMessages={chat.messages} />
 }
-
