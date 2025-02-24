@@ -69,15 +69,15 @@ import { FooterText } from '@/components/footer'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
-// ✅ Fix: Remove `Promise<>` from params
+// ✅ Fix: Ensure params is a plain object
 interface SharePageProps {
-  params: { id: string } // ✅ Corrected type
+  params: { id: string } // ✅ No Promise<>
 }
 
 export async function generateMetadata({
   params
 }: SharePageProps): Promise<Metadata> {
-  const chat = await getSharedChat(params.id) // ✅ No need to await params
+  const chat = await getSharedChat(params.id) // ✅ params is a plain object
 
   return {
     title: chat?.title.slice(0, 50) ?? 'Chat'
@@ -110,10 +110,3 @@ export default async function SharePage({ params }: SharePageProps) {
     </>
   )
 }
-
-
-
-
-
-
-
