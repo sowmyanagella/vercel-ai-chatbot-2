@@ -9,16 +9,18 @@ import { FooterText } from '@/components/footer'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
+// Define the interface for SharePageProps with params as Promise
 interface SharePageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{
+    id: string; // Ensuring that 'id' is treated as a string
+  }>
 }
 
 export async function generateMetadata({
   params
 }: SharePageProps): Promise<Metadata> {
-  const chat = await getSharedChat(params.id)
+  const resolvedParams = await params; // Await the params Promise resolution
+  const chat = await getSharedChat(resolvedParams.id)
 
   return {
     title: chat?.title.slice(0, 50) ?? 'Chat'
@@ -26,7 +28,8 @@ export async function generateMetadata({
 }
 
 export default async function SharePage({ params }: SharePageProps) {
-  const chat = await getSharedChat(params.id)
+  const resolvedParams = await params; // Await the params Promise resolution
+  const chat = await getSharedChat(resolvedParams.id)
 
   if (!chat || !chat?.sharePath) {
     notFound()
