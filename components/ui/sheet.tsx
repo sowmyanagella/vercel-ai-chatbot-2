@@ -121,8 +121,6 @@
 //   SheetDescription
 // }
 
-
-
 'use client'
 
 import * as React from 'react'
@@ -137,12 +135,11 @@ const SheetTrigger = SheetPrimitive.Trigger
 
 const SheetClose = SheetPrimitive.Close
 
-// Fix applied: explicitly extending PortalProps and adding className
 const SheetPortal = ({
   className,
   children,
   ...props
-}: SheetPrimitive.PortalProps & { className?: string }) => (
+}: { className?: string } & React.ComponentPropsWithoutRef<typeof SheetPrimitive.Portal>) => (
   <SheetPrimitive.Portal {...props}>
     <div className={cn('fixed inset-0 z-50 flex', className)}>
       {children}
@@ -154,14 +151,14 @@ SheetPortal.displayName = SheetPrimitive.Portal.displayName
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
->(({ className, children, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
+    ref={ref}
     className={cn(
       'fixed inset-0 z-50 transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
       className
     )}
     {...props}
-    ref={ref}
   />
 ))
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
