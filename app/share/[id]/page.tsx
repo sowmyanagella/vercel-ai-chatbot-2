@@ -1,10 +1,15 @@
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
 
 import { formatDate } from '@/lib/utils'
 import { getSharedChat } from '@/app/actions'
-import { ChatList } from '@/components/chat-list'
-import { FooterText } from '@/components/footer'
+// import { ChatList } from '@/components/chat-list'
+// import { FooterText } from '@/components/footer'
+
+// Dynamically import components to ensure they only run on the client side
+const ChatList = dynamic(() => import('@/components/chat-list'), { ssr: false })
+const FooterText = dynamic(() => import('@/components/footer'), { ssr: false })
 
 export const runtime = 'edge'
 export const preferredRegion = 'home'
