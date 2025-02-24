@@ -63,11 +63,11 @@ import { cookies } from 'next/headers'
 export const runtime = 'edge'
 export const preferredRegion = 'home'
 
-// Define the interface for ChatPageProps, using number for id
+// Define the interface for ChatPageProps, using string for id
 export interface ChatPageProps {
-  params: {
-    id: number;
-  }
+  params: Promise<{
+    id: string; // Using string for id
+  }>
 }
 
 // Generate metadata for the page
@@ -81,7 +81,8 @@ export async function generateMetadata({
     return {}
   }
 
-  const chat = await getChat(params.id)
+  const resolvedParams = await params; // Wait for params Promise resolution
+  const chat = await getChat(resolvedParams.id)
   return {
     title: chat?.title.toString().slice(0, 50) ?? 'Chat'
   }
@@ -93,10 +94,12 @@ export default async function ChatPage({ params }: ChatPageProps) {
   const session = await auth({ cookieStore })
 
   if (!session?.user) {
-    redirect(`/sign-in?next=/chat/${params.id}`)
+    const resolvedParams = await params; // Wait for params Promise resolution
+    redirect(`/sign-in?next=/chat/${resolvedParams.id}`)
   }
 
-  const chat = await getChat(params.id)
+  const resolvedParams = await params; // Wait for params Promise resolution
+  const chat = await getChat(resolvedParams.id)
 
   if (!chat) {
     notFound()
@@ -108,3 +111,4 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   return <Chat id={chat.id} initialMessages={chat.messages} />
 }
+
